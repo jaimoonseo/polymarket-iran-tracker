@@ -3,6 +3,7 @@
 interface Market {
   id: string;
   question: string;
+  question_ko?: string;
   volume: number;
   liquidity: number;
   volume24hr: number;

@@ -8,6 +8,7 @@ import Stats from '@/components/Stats';
 interface Market {
   id: string;
   question: string;
+  question_ko?: string;
   volume: number;
   liquidity: number;
   volume24hr: number;
@@ -20,6 +21,7 @@ export default function Home() {
   const [markets, setMarkets] = useState<Market[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchMarkets();
@@ -28,9 +30,11 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const fetchMarkets = async () => {
+  const fetchMarkets = async (search?: string) => {
     try {
-      const res = await fetch('/api/markets');
+      setLoading(true);
+      const url = search ? `/api/markets?search=${encodeURIComponent(search)}` : '/api/markets';
+      const res = await fetch(url);
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
       setMarkets(data.markets || []);
@@ -41,6 +45,11 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchMarkets(searchQuery);
   };
 
   const totalVolume = markets.reduce((sum, m) => sum + (parseFloat(m.volume as any) || 0), 0);
@@ -56,6 +65,38 @@ export default function Home() {
           totalVolume={totalVolume}
           volume24h={totalVolume24h}
         />
+
+        {/* Search Bar */}
+        <form onSubmit={handleSearch} className="mb-8">
+          <div className="relative max-w-2xl mx-auto">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="마켓 검색... (예: Trump, Bitcoin, NBA)"
+              className="w-full px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-lg text-white font-semibold transition-all hover:scale-105"
+            >
+              🔍 검색
+            </button>
+          </div>
+          {searchQuery && (
+            <div className="text-center mt-4">
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  fetchMarkets();
+                }}
+                className="text-gray-400 hover:text-white text-sm transition-colors"
+              >
+                ✕ 검색 초기화
+              </button>
+            </div>
+          )}
+        </form>
 
         {loading && (
           <div className="text-center py-20">
