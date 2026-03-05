@@ -37,9 +37,9 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search') || '';
 
-    // Fetch top markets from Polymarket sorted by 24h volume
+    // Fetch Iran-tagged markets from Polymarket using events/pagination endpoint
     const response = await fetch(
-      'https://gamma-api.polymarket.com/markets?limit=100&closed=false',
+      'https://gamma-api.polymarket.com/events/pagination?limit=50&active=true&archived=false&tag_slug=iran&closed=false&order=volume24hr&ascending=false&offset=0',
       {
         headers: {
           'Accept': 'application/json',
@@ -52,40 +52,49 @@ export async function GET(request: Request) {
       throw new Error('Failed to fetch from Polymarket');
     }
 
-    const allMarkets: any[] = await response.json();
+    const responseData: any = await response.json();
+    const events = responseData.data || responseData || [];
 
-    // Filter out markets with 0 volume and sort by 24h volume
-    let filteredMarkets = allMarkets
-      .filter((market) => {
-        const vol24hr = parseFloat(market.volume24hr || '0');
-        return vol24hr > 100; // Only markets with >$100 24h volume
-      })
-      .sort((a, b) => {
-        const volA = parseFloat(a.volume24hr || '0');
-        const volB = parseFloat(b.volume24hr || '0');
-        return volB - volA;
-      })
-      .slice(0, 50); // Get top 50 for filtering
+    // Extract markets from events - each event can have multiple markets
+    let allMarkets: any[] = [];
+    for (const event of events) {
+      if (event.markets && Array.isArray(event.markets)) {
+        // Event has multiple markets
+        for (const market of event.markets) {
+          allMarkets.push({
+            id: market.id || event.id,
+            question: market.question || event.title || event.description,
+            volume: market.volume || '0',
+            liquidity: market.liquidity || '0',
+            volume24hr: market.volume24hr || '0',
+            endDate: market.endDate || event.endDate,
+            market_slug: market.marketSlug || event.slug,
+            outcomes: market.outcomes,
+          });
+        }
+      } else {
+        // Single market event
+        allMarkets.push({
+          id: event.id,
+          question: event.title || event.description,
+          volume: event.volume || '0',
+          liquidity: event.liquidity || '0',
+          volume24hr: event.volume24hr || '0',
+          endDate: event.endDate,
+          market_slug: event.slug,
+          outcomes: event.outcomes,
+        });
+      }
+    }
 
     // Apply search filter if provided
+    let filteredMarkets = allMarkets;
     if (search) {
       const searchLower = search.toLowerCase();
-      filteredMarkets = filteredMarkets.filter(market =>
+      filteredMarkets = allMarkets.filter(market =>
         market.question.toLowerCase().includes(searchLower)
       );
     }
-
-    // Prioritize Iran-related markets - move them to the top
-    const iranKeywords = ['iran', 'iranian', 'tehran', 'israel-iran', 'iran-israel'];
-    const iranMarkets = filteredMarkets.filter(market =>
-      iranKeywords.some(keyword => market.question.toLowerCase().includes(keyword))
-    );
-    const otherMarkets = filteredMarkets.filter(market =>
-      !iranKeywords.some(keyword => market.question.toLowerCase().includes(keyword))
-    );
-
-    // Combine: Iran markets first, then others
-    filteredMarkets = [...iranMarkets, ...otherMarkets];
 
     // Limit to 30 markets
     filteredMarkets = filteredMarkets.slice(0, 30);
