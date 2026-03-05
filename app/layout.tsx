@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Iran War Predictions - Polymarket Tracker",
-  description: "Real-time tracking of Iran-US conflict predictions on Polymarket",
+  title: "Polymarket Tracker - Top Prediction Markets",
+  description: "Real-time tracking of top prediction markets on Polymarket",
 };
 
 export default function RootLayout({

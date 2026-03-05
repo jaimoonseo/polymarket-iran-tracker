@@ -5,10 +5,10 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">
-              🇮🇷 Iran War Predictions
+              📊 Polymarket Tracker
             </h1>
             <p className="text-gray-400">
-              Real-time prediction markets tracking Iran-related events from Polymarket
+              Real-time tracking of top prediction markets by 24h volume
             </p>
           </div>
           <a

@@ -16,9 +16,9 @@ interface PolymarketResponse {
 
 export async function GET() {
   try {
-    // Fetch Iran-related markets from Polymarket
+    // Fetch top markets from Polymarket sorted by 24h volume
     const response = await fetch(
-      'https://gamma-api.polymarket.com/markets?limit=100&closed=false',
+      'https://gamma-api.polymarket.com/markets?limit=50&closed=false&order=volume24hr',
       {
         headers: {
           'Accept': 'application/json',
@@ -33,27 +33,19 @@ export async function GET() {
 
     const allMarkets: PolymarketResponse[] = await response.json();
 
-    // Filter for Iran-related markets
-    const iranKeywords = [
-      'iran', 'iranian', 'tehran', 'hormuz', 'strait',
-      'persian gulf', 'irgc', 'khamenei', 'nuclear deal'
-    ];
-
-    const iranMarkets = allMarkets.filter((market) => {
-      const text = `${market.question} ${market.market_slug}`.toLowerCase();
-      return iranKeywords.some(keyword => text.includes(keyword));
-    });
-
-    // Sort by 24h volume
-    const sortedMarkets = iranMarkets.sort((a, b) => {
+    // Sort by 24h volume (in case API doesn't sort properly)
+    const sortedMarkets = allMarkets.sort((a, b) => {
       const volA = parseFloat(a.volume24hr || '0');
       const volB = parseFloat(b.volume24hr || '0');
       return volB - volA;
     });
 
+    // Take top 30 markets
+    const topMarkets = sortedMarkets.slice(0, 30);
+
     return NextResponse.json({
-      markets: sortedMarkets,
-      count: sortedMarkets.length,
+      markets: topMarkets,
+      count: topMarkets.length,
       updated_at: new Date().toISOString(),
     });
   } catch (error) {
