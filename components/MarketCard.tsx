@@ -35,8 +35,10 @@ export default function MarketCard({ market, index }: MarketCardProps) {
     });
   };
 
-  // Use event URL with slug
-  const polymarketUrl = `https://polymarket.com/event/${market.market_slug}`;
+  // Use search URL as fallback since event URLs may not work
+  // Encode the question for URL
+  const searchQuery = encodeURIComponent(market.question.substring(0, 50));
+  const polymarketUrl = `https://polymarket.com/?search=${searchQuery}`;
 
   // High volume indicator
   const vol24h = parseFloat(market.volume24hr as any) || 0;
