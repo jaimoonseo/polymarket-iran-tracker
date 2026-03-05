@@ -68,8 +68,10 @@ export async function GET(request: Request) {
             liquidity: market.liquidity || '0',
             volume24hr: market.volume24hr || '0',
             endDate: market.endDate || event.endDate,
-            market_slug: market.marketSlug || event.slug,
+            market_slug: market.slug || market.marketSlug || event.slug,
             outcomes: market.outcomes,
+            outcomePrices: market.outcomePrices,
+            groupItemTitle: market.groupItemTitle,
           });
         }
       } else {
@@ -83,6 +85,8 @@ export async function GET(request: Request) {
           endDate: event.endDate,
           market_slug: event.slug,
           outcomes: event.outcomes,
+          outcomePrices: event.outcomePrices,
+          groupItemTitle: event.groupItemTitle,
         });
       }
     }
@@ -115,6 +119,8 @@ export async function GET(request: Request) {
           end_date_iso: market.endDate || market.end_date_iso,
           market_slug: slug,
           outcomes: market.outcomes,
+          outcomePrices: market.outcomePrices,
+          groupItemTitle: market.groupItemTitle,
         };
       })
     );
