@@ -35,7 +35,8 @@ export default function MarketCard({ market, index }: MarketCardProps) {
     });
   };
 
-  const polymarketUrl = `https://polymarket.com/event/${market.market_slug}`;
+  // Use predictions URL with market ID
+  const polymarketUrl = `https://polymarket.com/predictions/${market.id}`;
 
   // High volume indicator
   const vol24h = parseFloat(market.volume24hr as any) || 0;
