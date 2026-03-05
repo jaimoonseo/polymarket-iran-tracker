@@ -75,6 +75,18 @@ export async function GET(request: Request) {
       );
     }
 
+    // Prioritize Iran-related markets - move them to the top
+    const iranKeywords = ['iran', 'iranian', 'tehran', 'israel-iran', 'iran-israel'];
+    const iranMarkets = filteredMarkets.filter(market =>
+      iranKeywords.some(keyword => market.question.toLowerCase().includes(keyword))
+    );
+    const otherMarkets = filteredMarkets.filter(market =>
+      !iranKeywords.some(keyword => market.question.toLowerCase().includes(keyword))
+    );
+
+    // Combine: Iran markets first, then others
+    filteredMarkets = [...iranMarkets, ...otherMarkets];
+
     // Limit to 30 markets
     filteredMarkets = filteredMarkets.slice(0, 30);
 
