@@ -45,16 +45,26 @@ export async function GET() {
         return volB - volA;
       })
       .slice(0, 30)
-      .map((market) => ({
-        id: market.id,
-        question: market.question,
-        volume: market.volume,
-        liquidity: market.liquidity,
-        volume24hr: market.volume24hr,
-        end_date_iso: market.endDate || market.end_date_iso,
-        market_slug: market.slug || market.market_slug,
-        outcomes: market.outcomes,
-      }));
+      .map((market) => {
+        const slug = market.slug || market.market_slug;
+        const url = `https://polymarket.com/event/${slug}`;
+
+        // Log for debugging
+        console.log(`Market: ${market.question.substring(0, 50)}...`);
+        console.log(`  Slug: ${slug}`);
+        console.log(`  URL: ${url}`);
+
+        return {
+          id: market.id,
+          question: market.question,
+          volume: market.volume,
+          liquidity: market.liquidity,
+          volume24hr: market.volume24hr,
+          end_date_iso: market.endDate || market.end_date_iso,
+          market_slug: slug,
+          outcomes: market.outcomes,
+        };
+      });
 
     return NextResponse.json({
       markets: activeMarkets,
