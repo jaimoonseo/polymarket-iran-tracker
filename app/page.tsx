@@ -63,7 +63,7 @@ export default function Home() {
               <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
               <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 absolute" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
             </div>
-            <p className="mt-6 text-gray-400 text-lg font-medium animate-pulse">Loading markets...</p>
+            <p className="mt-6 text-gray-400 text-lg font-medium animate-pulse">마켓 로딩 중...</p>
             <div className="flex justify-center gap-2 mt-4">
               <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
               <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
@@ -80,7 +80,7 @@ export default function Home() {
 
         {!loading && !error && markets.length === 0 && (
           <div className="text-center py-12 text-gray-400">
-            No markets found
+            마켓을 찾을 수 없습니다
           </div>
         )}
 
@@ -93,10 +93,10 @@ export default function Home() {
         <div className="mt-12 text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 rounded-full border border-gray-700">
             <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            <span className="text-gray-400 text-sm">Data from Polymarket • Updates every 5 minutes</span>
+            <span className="text-gray-400 text-sm">폴리마켓 데이터 • 5분마다 업데이트</span>
           </div>
           <p className="text-gray-500 text-sm">
-            Last updated: {new Date().toLocaleString()}
+            마지막 업데이트: {new Date().toLocaleString('ko-KR')}
           </p>
         </div>
       </div>

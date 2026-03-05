@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Polymarket Tracker - Top Prediction Markets",
-  description: "Real-time tracking of top prediction markets on Polymarket",
+  title: "폴리마켓 트래커 - 인기 예측 마켓",
+  description: "폴리마켓의 인기 예측 마켓을 실시간으로 추적합니다",
 };
 
 export default function RootLayout({

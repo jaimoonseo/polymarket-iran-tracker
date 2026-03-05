@@ -55,7 +55,7 @@ export default function Stats({ totalMarkets, totalVolume, volume24h }: StatsPro
         <div className="relative z-10">
           <div className="text-blue-100 text-sm font-medium mb-2 flex items-center gap-2">
             <span className="text-2xl">📊</span>
-            Active Markets
+            활성 마켓
           </div>
           <div className="text-white text-4xl font-bold tabular-nums">
             {displayMarkets}
@@ -71,7 +71,7 @@ export default function Stats({ totalMarkets, totalVolume, volume24h }: StatsPro
         <div className="relative z-10">
           <div className="text-green-100 text-sm font-medium mb-2 flex items-center gap-2">
             <span className="text-2xl">💎</span>
-            Total Volume
+            총 거래량
           </div>
           <div className="text-white text-4xl font-bold tabular-nums">
             {formatCurrency(displayVolume)}
@@ -90,7 +90,7 @@ export default function Stats({ totalMarkets, totalVolume, volume24h }: StatsPro
         <div className="relative z-10">
           <div className="text-purple-100 text-sm font-medium mb-2 flex items-center gap-2">
             <span className="text-2xl">🔥</span>
-            24h Volume
+            24시간 거래량
           </div>
           <div className="text-white text-4xl font-bold tabular-nums">
             {formatCurrency(displayVolume24h)}

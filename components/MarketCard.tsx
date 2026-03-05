@@ -78,7 +78,7 @@ export default function MarketCard({ market, index }: MarketCardProps) {
           <div className="flex justify-between items-center p-2 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors">
             <span className="text-gray-400 text-sm flex items-center gap-2">
               <span className="text-xl">💰</span>
-              Total Volume
+              총 거래량
             </span>
             <span className="text-white font-bold">
               {formatCurrency(parseFloat(market.volume as any) || 0)}
@@ -88,7 +88,7 @@ export default function MarketCard({ market, index }: MarketCardProps) {
           <div className="flex justify-between items-center p-2 rounded-lg bg-green-900/20 hover:bg-green-900/30 transition-colors">
             <span className="text-gray-400 text-sm flex items-center gap-2">
               <span className="text-xl">📈</span>
-              24h Volume
+              24시간 거래량
             </span>
             <span className="text-green-400 font-bold">
               {formatCurrency(parseFloat(market.volume24hr as any) || 0)}
@@ -98,7 +98,7 @@ export default function MarketCard({ market, index }: MarketCardProps) {
           <div className="flex justify-between items-center p-2 rounded-lg bg-blue-900/20 hover:bg-blue-900/30 transition-colors">
             <span className="text-gray-400 text-sm flex items-center gap-2">
               <span className="text-xl">💧</span>
-              Liquidity
+              유동성
             </span>
             <span className="text-blue-400 font-bold">
               {formatCurrency(parseFloat(market.liquidity as any) || 0)}
@@ -108,7 +108,7 @@ export default function MarketCard({ market, index }: MarketCardProps) {
           <div className="flex justify-between items-center pt-3 border-t border-gray-700">
             <span className="text-gray-400 text-sm flex items-center gap-2">
               <span className="text-xl">⏰</span>
-              End Date
+              종료일
             </span>
             <span className="text-gray-300 text-sm font-medium">
               {formatDate(market.end_date_iso)}
@@ -122,7 +122,7 @@ export default function MarketCard({ market, index }: MarketCardProps) {
           rel="noopener noreferrer"
           className="mt-5 block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white text-center py-3 rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-blue-500/50 transform hover:scale-[1.02]"
         >
-          View on Polymarket →
+          폴리마켓에서 보기 →
         </a>
       </div>
 

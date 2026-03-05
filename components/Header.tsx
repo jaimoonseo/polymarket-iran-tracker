@@ -12,11 +12,11 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <div className="space-y-2">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient">
-              📊 Polymarket Tracker
+              📊 폴리마켓 트래커
             </h1>
             <p className="text-gray-400 flex items-center gap-2">
               <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              Real-time tracking of top prediction markets by 24h volume
+              24시간 거래량 기준 인기 예측 마켓 실시간 추적
             </p>
           </div>
           <a
