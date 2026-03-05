@@ -70,9 +70,14 @@ export default function MarketCard({ market, index }: MarketCardProps) {
           rel="noopener noreferrer"
           className="block"
         >
-          <h3 className="text-lg font-semibold text-white mb-4 line-clamp-3 group-hover:text-blue-400 transition-colors duration-200">
-            {market.question}
+          <h3 className="text-lg font-semibold text-white mb-3 line-clamp-3 group-hover:text-blue-400 transition-colors duration-200">
+            {market.question_ko || market.question}
           </h3>
+          {market.question_ko && (
+            <p className="text-sm text-gray-400 mb-2 line-clamp-2 italic">
+              {market.question}
+            </p>
+          )}
         </a>
 
         <div className="space-y-3">
