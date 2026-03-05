@@ -58,9 +58,17 @@ export default function Home() {
         />
 
         {loading && (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-            <p className="mt-4 text-gray-400">Loading markets...</p>
+          <div className="text-center py-20">
+            <div className="relative inline-flex items-center justify-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 absolute" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+            </div>
+            <p className="mt-6 text-gray-400 text-lg font-medium animate-pulse">Loading markets...</p>
+            <div className="flex justify-center gap-2 mt-4">
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
+              <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+              <span className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+            </div>
           </div>
         )}
 
@@ -77,14 +85,17 @@ export default function Home() {
         )}
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {markets.map((market) => (
-            <MarketCard key={market.id} market={market} />
+          {markets.map((market, index) => (
+            <MarketCard key={market.id} market={market} index={index} />
           ))}
         </div>
 
-        <div className="mt-12 text-center text-gray-500 text-sm">
-          <p>Data from Polymarket • Updates every 5 minutes</p>
-          <p className="mt-2">
+        <div className="mt-12 text-center space-y-3">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 rounded-full border border-gray-700">
+            <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span className="text-gray-400 text-sm">Data from Polymarket • Updates every 5 minutes</span>
+          </div>
+          <p className="text-gray-500 text-sm">
             Last updated: {new Date().toLocaleString()}
           </p>
         </div>
