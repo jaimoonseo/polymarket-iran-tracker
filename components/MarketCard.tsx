@@ -8,8 +8,8 @@ interface Market {
   liquidity: number;
   volume24hr: number;
   end_date_iso: string;
-  outcomes?: string[];
-  outcomePrices?: string[];
+  outcomes?: string[] | string;
+  outcomePrices?: string[] | string;
   groupItemTitle?: string;
   market_slug: string;
 }
@@ -83,38 +83,55 @@ export default function MarketCard({ market, index }: MarketCardProps) {
         </a>
 
         {/* Outcomes and Prices */}
-        {market.outcomes && market.outcomePrices && market.outcomes.length > 0 && (
-          <div className="mb-4 space-y-2">
-            {market.groupItemTitle && (
-              <div className="text-xs text-gray-400 mb-1">
-                {market.groupItemTitle}
-              </div>
-            )}
-            {market.outcomes.map((outcome, idx) => {
-              const price = market.outcomePrices?.[idx];
-              const percentage = price ? (parseFloat(price) * 100).toFixed(1) : '0';
-              const isHighProb = parseFloat(percentage) > 50;
+        {(() => {
+          try {
+            // Parse outcomes and prices if they're strings
+            const outcomes = typeof market.outcomes === 'string'
+              ? JSON.parse(market.outcomes)
+              : market.outcomes;
+            const outcomePrices = typeof market.outcomePrices === 'string'
+              ? JSON.parse(market.outcomePrices)
+              : market.outcomePrices;
 
-              return (
-                <div
-                  key={idx}
-                  className={`flex justify-between items-center p-3 rounded-lg ${
-                    isHighProb
-                      ? 'bg-green-900/30 border border-green-700/50'
-                      : 'bg-gray-700/30 border border-gray-600/50'
-                  } hover:scale-[1.02] transition-transform duration-200`}
-                >
-                  <span className="text-white font-medium">{outcome}</span>
-                  <span className={`text-lg font-bold ${
-                    isHighProb ? 'text-green-400' : 'text-gray-300'
-                  }`}>
-                    {percentage}%
-                  </span>
+            if (!outcomes || !outcomePrices || outcomes.length === 0) return null;
+
+          return (
+            <div className="mb-4 space-y-2">
+              {market.groupItemTitle && (
+                <div className="text-xs text-gray-400 mb-1">
+                  {market.groupItemTitle}
                 </div>
-              );
-            })}
-          </div>
-        )}
+              )}
+              {outcomes.map((outcome: string, idx: number) => {
+                const price = outcomePrices?.[idx];
+                const percentage = price ? (parseFloat(price) * 100).toFixed(1) : '0';
+                const isHighProb = parseFloat(percentage) > 50;
+
+                return (
+                  <div
+                    key={idx}
+                    className={`flex justify-between items-center p-3 rounded-lg ${
+                      isHighProb
+                        ? 'bg-green-900/30 border border-green-700/50'
+                        : 'bg-gray-700/30 border border-gray-600/50'
+                    } hover:scale-[1.02] transition-transform duration-200`}
+                  >
+                    <span className="text-white font-medium">{outcome}</span>
+                    <span className={`text-lg font-bold ${
+                      isHighProb ? 'text-green-400' : 'text-gray-300'
+                    }`}>
+                      {percentage}%
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+          } catch (error) {
+            console.error('Error parsing outcomes:', error);
+            return null;
+          }
+        })()}
 
         <div className="space-y-3">
           <div className="flex justify-between items-center p-2 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors">
