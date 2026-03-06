@@ -59,8 +59,12 @@ export async function GET(request: Request) {
     let allMarkets: any[] = [];
     for (const event of events) {
       if (event.markets && Array.isArray(event.markets)) {
-        // Event has multiple markets
+        // Event has multiple markets - filter out 0 volume markets
         for (const market of event.markets) {
+          const volume = parseFloat(market.volume || '0');
+          // Skip markets with 0 volume
+          if (volume === 0) continue;
+
           allMarkets.push({
             id: market.id || event.id,
             question: market.question || event.title || event.description,
@@ -76,6 +80,10 @@ export async function GET(request: Request) {
         }
       } else {
         // Single market event
+        const volume = parseFloat(event.volume || '0');
+        // Skip events with 0 volume
+        if (volume === 0) continue;
+
         allMarkets.push({
           id: event.id,
           question: event.title || event.description,
@@ -91,11 +99,7 @@ export async function GET(request: Request) {
       }
     }
 
-    // Filter out markets with 0 volume
-    let filteredMarkets = allMarkets.filter(market => {
-      const volume = parseFloat(market.volume || '0');
-      return volume > 0;
-    });
+    let filteredMarkets = allMarkets;
 
     // Apply search filter if provided
     if (search) {
