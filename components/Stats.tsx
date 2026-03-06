@@ -40,12 +40,17 @@ export default function Stats({ totalMarkets, totalVolume, volume24h }: StatsPro
   }, [totalMarkets, totalVolume, volume24h]);
 
   const formatCurrency = (value: number) => {
-    if (value >= 1000000) {
-      return `$${(value / 1000000).toFixed(2)}M`;
-    } else if (value >= 1000) {
-      return `$${(value / 1000).toFixed(1)}K`;
+    // USD to KRW conversion (1 USD ≈ 1350 KRW)
+    const krwValue = value * 1350;
+
+    if (krwValue >= 1000000000) {
+      return `₩${(krwValue / 1000000000).toFixed(2)}B`;
+    } else if (krwValue >= 1000000) {
+      return `₩${(krwValue / 1000000).toFixed(1)}M`;
+    } else if (krwValue >= 1000) {
+      return `₩${(krwValue / 1000).toFixed(1)}K`;
     }
-    return `$${value.toFixed(0)}`;
+    return `₩${krwValue.toFixed(0)}`;
   };
 
   return (

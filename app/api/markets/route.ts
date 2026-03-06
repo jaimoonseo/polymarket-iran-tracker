@@ -91,11 +91,16 @@ export async function GET(request: Request) {
       }
     }
 
+    // Filter out markets with 0 volume
+    let filteredMarkets = allMarkets.filter(market => {
+      const volume = parseFloat(market.volume || '0');
+      return volume > 0;
+    });
+
     // Apply search filter if provided
-    let filteredMarkets = allMarkets;
     if (search) {
       const searchLower = search.toLowerCase();
-      filteredMarkets = allMarkets.filter(market =>
+      filteredMarkets = filteredMarkets.filter(market =>
         market.question.toLowerCase().includes(searchLower)
       );
     }
